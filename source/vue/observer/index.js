@@ -13,7 +13,8 @@ export function initState(vm) {
     }
 }
 
-function proxy(vm, key, source) {
+function proxy(vm, source, key) {
+    // data 保持在了 vm._data 中
     Object.defineProperty(vm, key, {
         get() {
             return vm[source][key];
@@ -30,7 +31,7 @@ function initData(vm) {
     data = vm._data = typeof data === 'function' ? data.call(vm) : data || {}
     // 循环添加属性
     for (let key in data) {
-        proxy(vm, key, '_data');
+        proxy(vm,'_data',key);
     }
     observer(vm._data);
 }

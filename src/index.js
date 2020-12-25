@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-let Vm = new Vue({
+let vm = new Vue({
     el: '#app',
     data() {
         return {
@@ -17,5 +17,7 @@ let Vm = new Vue({
     }
 })
 
-Vm._data.arr[0] = 44;
-console.log(Vm.arr)
+vm.arr.push(55);
+
+
+
