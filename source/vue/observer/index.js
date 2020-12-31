@@ -14,7 +14,7 @@ export function initState(vm) {
 }
 
 function proxy(vm, source, key) {
-    // data 保持在了 vm._data 中
+    // data 保存在了 vm._data 中
     Object.defineProperty(vm, key, {
         get() {
             return vm[source][key];

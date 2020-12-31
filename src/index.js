@@ -4,9 +4,9 @@ let vm = new Vue({
     el: '#app',
     data() {
         return {
-            message: 'JS',
+            message: 'JS++',
             arr: [1, 2, 3],
-            obj: { a: 1, b: 2 }
+            obj: {name: 'fyh', sex: '男'}
         }
     },
     computed() {
@@ -17,7 +17,8 @@ let vm = new Vue({
     }
 })
 
-vm.arr.push(55);
+console.log(vm.message, '.get');
+
 
 
 
