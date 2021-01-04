@@ -17,8 +17,9 @@ let vm = new Vue({
     }
 })
 
-console.log(vm.message, '.get');
 
-
+setTimeout(() => {
+    vm._data.message = 'NodeJs'
+}, 2000);
 
 

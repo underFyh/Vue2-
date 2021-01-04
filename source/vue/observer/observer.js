@@ -1,13 +1,20 @@
 import { observer } from "./index"
 import { newArrayProto, observerArray } from './array';
+import Dep from './dep';
 
 // 数据添加响应式
 export function definedReactive(data, key, value) {
     // 递归给属性进行数据劫持
     observer(value);
+    // 每个值实现响应式的时候都挂载dep依赖
+    let dep = new Dep();
+
     Object.defineProperty(data, key, {
         get() {
             console.log('get执行');
+            if (Dep.target) {
+                dep.addSub(Dep.target);
+            }
             return value;
         },
         set(newVal) {
@@ -16,6 +23,8 @@ export function definedReactive(data, key, value) {
             observer(newVal);
             console.log('set执行');
             value = newVal;
+            // 发布
+            dep.notify();
         }
     })
 }
