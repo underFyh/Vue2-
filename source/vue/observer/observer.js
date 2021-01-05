@@ -11,7 +11,7 @@ export function definedReactive(data, key, value) {
 
     Object.defineProperty(data, key, {
         get() {
-            console.log('get执行');
+            console.log('get执行', key);
             if (Dep.target) {
                 dep.addSub(Dep.target);
             }
@@ -21,7 +21,7 @@ export function definedReactive(data, key, value) {
             if (newVal === value) return;
             // 如果新值也是对象则进行数据劫持
             observer(newVal);
-            console.log('set执行');
+            // console.log('set执行', newVal);
             value = newVal;
             // 发布
             dep.notify();

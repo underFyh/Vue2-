@@ -24,6 +24,10 @@ class Watcher {
         popTarget();
     }
 
+    run() {
+        this.get();
+    }
+
     // watcher 和 dep相互依赖 去除重复的watcher
     addDep(dep) {
         let id = dep.id;
@@ -37,9 +41,62 @@ class Watcher {
     }
 
     update() {
-        // todo: 待写更新逻辑
-        console.log(1)
+        // 避免多次compiler逻辑
+        // this.get();
+        queueWatcher(this);
     }
+}
+
+// 判断队列
+let has = {};
+let queue = [];
+
+function queueWatcher(watcher) {
+    let id = watcher.id;
+    if (has[id] == null) {
+        has[id] = true;
+        // 此时只有一个id = 0 的watcher
+        queue.push(watcher);
+
+        // 使用异步执行
+        nextTick(flushQueue);
+    }
+}
+
+function flushQueue() {
+    queue.forEach(watcher => watcher.run());
+    has = {};
+    queue = [];
+}
+
+// nextTick逻辑
+let callbacks = []
+function flushCallbacks() {
+    callbacks.forEach(cb => cb());
+}
+function nextTick(cb) {
+    callbacks.push(cb);
+    let timerFunction = () => {
+        flushCallbacks();
+    }
+
+    if (Promise) {
+        return Promise.resolve().then(timerFunction);
+    }
+
+    if (MutationObserver) {
+        let observe = new MutationObserver(timerFunction);
+        let textNode = document.createTextNode(10);
+        observe.observe({ characterData: true });
+        textNode.textContent = 20;
+        return ;
+    }
+
+    if (setImmediate) {
+        return  setImmediate(timerFunction);
+    }
+
+    setTimeout(timerFunction, 0);
 }
 
 export default Watcher;

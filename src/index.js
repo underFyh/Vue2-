@@ -19,7 +19,10 @@ let vm = new Vue({
 
 
 setTimeout(() => {
+    // 模拟更新视图
     vm._data.message = 'NodeJs'
-}, 2000);
+    vm._data.message = 'Koa2'
+    vm._data.message = 'TypeScript'
+}, 3000);
 
 

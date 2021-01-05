@@ -28,6 +28,7 @@ Vue.prototype.$mount = function () {
 }
 
 Vue.prototype._update = function () {
+    console.log('upDate')
     let vm = this,
         el = vm.$el,
         NodeList = document.createDocumentFragment();

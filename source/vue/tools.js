@@ -15,7 +15,11 @@ export function compiler(node, vm) {
 
 
 export function compilerText(node, vm) {
-    node.textContent = node.textContent.replace(reg, function (...args) {
+    // 保存exp 下次更新的时候还能正常运行
+    if (!node.expr) {
+        node.expr = node.textContent; // {{ message }} 保存至node上
+    }
+    node.textContent = node.expr.replace(reg, function (...args) {
         return getValue(trimSpace(args[1]), vm);
     })
 }
