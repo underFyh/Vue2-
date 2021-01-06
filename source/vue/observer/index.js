@@ -41,5 +41,10 @@ export function observer(data) {
     if (typeof data !== 'object' || data === null) {
         return;
     }
+
+    if (data.__ob__) {  // 数组则无需重复添加依赖
+        return data.__ob__
+    }
+
     return new Observer(data);
 }

@@ -1,19 +1,26 @@
 import { observer } from "./index"
-import { newArrayProto, observerArray } from './array';
+import { newArrayProto, observerArray, dependArray } from './array';
 import Dep from './dep';
 
 // 数据添加响应式
 export function definedReactive(data, key, value) {
-    // 递归给属性进行数据劫持
-    observer(value);
+    // 递归给属性进行数据劫持, 如果是对象或者数组则有返回new Observe()
+    let childOb = observer(value);
     // 每个值实现响应式的时候都挂载dep依赖
     let dep = new Dep();
 
     Object.defineProperty(data, key, {
         get() {
-            console.log('get执行', key);
             if (Dep.target) {
-                dep.addSub(Dep.target);
+                // todo: 此时会加入重复的watcher update方法可以去除重复的watcher操作
+                dep.depend();
+
+                if (childOb) {
+                    childOb.dep.depend(); // 给数组添加上依赖
+
+                    // 递归处理多维数组
+                    dependArray(value); // [[1], 2];
+                }
             }
             return value;
         },
@@ -32,7 +39,15 @@ export function definedReactive(data, key, value) {
 // 给数据添加setter getter
 class Observer {
     constructor(data) {
+        console.log(data);
+        // 数组依赖收集
+        this.dep = new Dep();
+        Object.defineProperty(data, '__ob__', {
+            get:() => this  // 实例保存到data '__ob__'中
+        })
+
         if (Array.isArray(data)) {
+            console.log('数组');
             data.__proto__ = newArrayProto;
             // 观察数组
             observerArray(data);

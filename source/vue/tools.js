@@ -32,8 +32,9 @@ function trimSpace(str) {
 // 获取值
 function getValue(expr, vm) {
     let keys = expr.split('.');
-    return keys.reduce((prevValue, curValue) => {
+    let res =  keys.reduce((prevValue, curValue) => {
         prevValue = prevValue[curValue];
         return prevValue;
     }, vm)
+    return JSON.stringify(res);
 }

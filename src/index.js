@@ -5,7 +5,7 @@ let vm = new Vue({
     data() {
         return {
             message: 'JS++',
-            arr: [1, 2, 3],
+            arr: [[[1],], 2, 3],
             obj: {name: 'fyh', sex: '男'}
         }
     },
@@ -20,9 +20,8 @@ let vm = new Vue({
 
 setTimeout(() => {
     // 模拟更新视图
-    vm._data.message = 'NodeJs'
-    vm._data.message = 'Koa2'
-    vm._data.message = 'TypeScript'
+    vm._data.arr[0][0].push(4)
+
 }, 3000);
 
 

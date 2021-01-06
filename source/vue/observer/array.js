@@ -39,9 +39,21 @@ methods.forEach(method => {
             observerArray(insertedElement);
         }
 
+        // 使用自己定义方法的时候触发依赖
+        this.__ob__.dep.notify();
+
         return result;
     }
 })
 
+function dependArray(value) {
+    for (let i = 0; i < value.length; i++) {
+        let item = value[0];
+        item.__ob__ && item.__ob__.dep.depend(); // 添加依赖
+        if (Array.isArray(item)) {
+            dependArray(item);
+        }
+    }
+}
 
-export { newArrayProto }
+export { newArrayProto, dependArray }
