@@ -9,7 +9,7 @@ export function initState(vm) {
 
     }
     if ($option.watch) {
-
+        initWatch(vm);
     }
 }
 
@@ -34,6 +34,20 @@ function initData(vm) {
         proxy(vm,'_data',key);
     }
     observer(vm._data);
+}
+
+function initWatch(vm) {
+    let watch = vm.$options.watch;
+    for(let key in watch) {
+        let handler = watch[key];
+        createWatcher(vm, key, handler);
+    }
+}
+
+
+function createWatcher(vm, key, handler) {
+    return vm.$watch(key, handler)
+
 }
 
 

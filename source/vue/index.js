@@ -27,6 +27,12 @@ Vue.prototype.$mount = function () {
     new Watcher(vm, updateComponent);
 }
 
+Vue.prototype.$watch = function(expr, handler) {
+    let vm = this;
+    // 区别渲染watcher 用户自定义watcher
+    new Watcher(vm, expr, handler, { user: true });
+}
+
 Vue.prototype._update = function () {
     console.log('upDate')
     let vm = this,

@@ -30,7 +30,7 @@ function trimSpace(str) {
 }
 
 // 获取值
-function getValue(expr, vm) {
+export function getValue(expr, vm) {
     let keys = expr.split('.');
     let res =  keys.reduce((prevValue, curValue) => {
         prevValue = prevValue[curValue];

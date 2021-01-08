@@ -1,4 +1,5 @@
 import { pushTarget, popTarget } from './dep'
+import { getValue } from '../tools';
 
 // 保证每个实例化的组件唯一id
 let vmId = 0;
@@ -7,25 +8,45 @@ class Watcher {
     constructor(vm, expOrFn, cb = () => {}, opts = {}) {
         this.vm = vm;
         this.expOrFn = expOrFn;
+        if (typeof expOrFn === 'function') {
+            this.getter = expOrFn;
+        } else {
+            // 用户自定义watcher
+            this.getter = function () {
+                return getValue(expOrFn, vm); // message
+            }
+        }
+        if (opts.user) {
+            this.user = true;
+        }
+
         this.cb = cb;
         this.opts = opts;
         this.id = vmId ++;
         this.deps = [];
         this.depsId = new Set();
-        if (typeof expOrFn === 'function') {
-            this.getter = expOrFn;
-        }
+
+        this.value = this.get();
         this.get();
     }
 
     get() {
+        debugger;
         pushTarget(this);
-        this.getter();
+        // watcher 保存老值
+        let value = this.getter();
         popTarget();
+        return value;
     }
 
     run() {
-        this.get();
+        // 获取新值
+        // this.get();
+        let value = this.get();
+        if (this.value !== value) {
+            // 新值  旧值
+            this.cb(value, this.value);
+        }
     }
 
     // watcher 和 dep相互依赖 去除重复的watcher

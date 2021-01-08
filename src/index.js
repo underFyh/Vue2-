@@ -13,15 +13,17 @@ let vm = new Vue({
 
     },
     watch: {
-
+        message: function (newValue, oldValue) {
+            console.log(newValue, oldValue);
+        }
     }
 })
 
 
-setTimeout(() => {
-    // 模拟更新视图
-    vm._data.arr[0][0].push(4)
-
-}, 3000);
+// setTimeout(() => {
+//     // 模拟更新视图
+//     vm.message = 'node';
+//
+// }, 3000);
 
 
